@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <title>Kurokami · Developer Portfolio</title>
+  <meta name="description" content="Kurokami — web & VR developer. Projects, tech stack, and contact.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./portfolio.css">
+  <script defer src="./portfolio.js"></script>
+
+</head>
+
+<body>
+  <div id="progress"></div>
+  <div id="backdrop"></div>
+  <div id="grid-lines"></div>
+  <div id="spotlight"></div>
+  <canvas id="petals"></canvas>
+
+  <nav>
+    <a class="brand" href="#top"><span class="dot"></span><span class="prompt">~/</span>kurokami</a>
+    <div class="nav-links">
+      <a href="#stack">stack</a>
+      <a href="#projects">projects</a>
+      <a href="#experience">experience</a>
+      <a href="#contact">contact</a>
+      <button id="paletteBtn" title="Command palette">⌘ <span class="kbd">Ctrl K</span></button>
+      <button id="themeBtn" title="Toggle theme">🌙</button>
+      <a class="gh" href="https://github.com/k3rokami" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <span class="status"><span class="live"></span>Available for work</span>
+        <h1>Kurokami<span class="accent">.</span><br>builds for web &amp; VR.</h1>
+        <p class="role mono"><span id="role"></span><span class="cursor">&nbsp;</span></p>
+        <p class="lead">Developer who ships web front-ends, VRChat worlds and avatars, and small tools. Clean code, playful UI, real projects. Try the terminal → or press <span class="kbd">Ctrl K</span>.</p>
+        <div class="cta">
+          <a class="btn primary" href="#projects">View projects</a>
+          <a class="btn ghost" href="https://github.com/k3rokami" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="terminal">
+          <div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>kurokami@dev — type 'help'</span></div>
+          <div class="screen" id="termScreen"></div>
+          <div class="inputline"><span class="ps">$</span><input id="termInput" autocomplete="off" spellcheck="false" aria-label="terminal input"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="section"><div class="stats reveal" id="stats"></div></section>
+
+    <section class="section" id="stack">
+      <div class="section-head"><span class="idx">01.</span><h2>Tech stack</h2><span class="line"></span></div>
+      <div class="stack reveal" id="stackList"></div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="section-head"><span class="idx">02.</span><h2>Projects</h2><span class="line"></span></div>
+      <div class="filters reveal" id="filters"></div>
+      <div class="grid" id="projectGrid"></div>
+    </section>
+
+    <section class="section" id="experience">
+      <div class="section-head"><span class="idx">03.</span><h2>Experience</h2><span class="line"></span></div>
+      <div class="timeline reveal" id="timeline"></div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="section-head"><span class="idx">04.</span><h2>Contact</h2><span class="line"></span></div>
+      <div class="glass reveal">
+        <p>Open to freelance and collaboration. Click a chip to copy, or jump to GitHub.</p>
+        <div class="socials" id="socials"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">built with <span class="heart">❤</span> &amp; vanilla JS · <a href="./index.html" style="color:var(--pink)">~/links</a></footer>
+
+  <button id="toTop" title="Back to top" aria-label="Back to top">↑</button>
+
+  <div id="palette">
+    <div class="pal-box">
+      <input id="palInput" placeholder="Type a command or search…" autocomplete="off" spellcheck="false">
+      <div class="pal-list" id="palList"></div>
+    </div>
+  </div>
+
+</body>
+
+</html>
