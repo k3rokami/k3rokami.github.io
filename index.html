@@ -6,19 +6,49 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
-  <title>Kurokami · Developer Portfolio</title>
+  <title>Leong Jun Hong · Developer Portfolio</title>
   <meta name="description" content="Kurokami — web & VR developer. Projects, tech stack, and contact.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="./portfolio.css">
-  <script defer src="./portfolio.js"></script>
+  <link rel="stylesheet" href="./index.css">
+  <script defer src="./stack-data.js"></script>
+  <script defer src="./projects-data.js"></script>
+  <script defer src="./index.js"></script>
 
 </head>
 
 <body>
-  <div id="progress"></div>
+  <div id="loader" aria-hidden="true">
+    <canvas id="loaderPetals"></canvas>
+    <div class="loader-inner">
+      <div class="mage">
+        <img id="mageImg" src="./Background/frieren.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <svg class="mage-fallback" viewBox="0 0 120 180" width="150" height="225" aria-hidden="true">
+          <!-- original elf-mage silhouette (not a specific character) -->
+          <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <!-- hair -->
+            <path d="M42 46 q-12 -2 -14 24 q-2 34 6 70 q3 14 -2 24" fill="currentColor" fill-opacity=".14"/>
+            <path d="M78 46 q12 -2 14 24 q2 34 -6 70 q-3 14 2 24" fill="currentColor" fill-opacity=".14"/>
+            <!-- head -->
+            <circle cx="60" cy="40" r="17" fill="currentColor" fill-opacity=".10"/>
+            <!-- elf ears -->
+            <path d="M44 38 q-10 -4 -13 -13"/>
+            <path d="M76 38 q10 -4 13 -13"/>
+            <!-- cloak body -->
+            <path d="M40 60 q20 10 40 0 l10 86 q-30 14 -60 0 z" fill="currentColor" fill-opacity=".12"/>
+            <!-- staff -->
+            <line x1="92" y1="30" x2="100" y2="150"/>
+            <circle class="staff-orb" cx="90" cy="26" r="6" fill="currentColor" fill-opacity=".25"/>
+          </g>
+        </svg>
+      </div>
+      <div class="loader-name">kurokami</div>
+      <div class="loader-log mono" id="loaderLog"></div>
+      <div class="loader-bar"><span id="loaderFill"></span></div>
+    </div>
+  </div>
   <div id="backdrop"></div>
   <div id="grid-lines"></div>
   <div id="spotlight"></div>
@@ -27,11 +57,13 @@
   <nav>
     <a class="brand" href="#top"><span class="dot"></span><span class="prompt">~/</span>kurokami</a>
     <div class="nav-links">
+      <a href="#about">about</a>
       <a href="#stack">stack</a>
       <a href="#projects">projects</a>
       <a href="#experience">experience</a>
+      <a href="./resume.html">resume</a>
       <a href="#contact">contact</a>
-      <button id="paletteBtn" title="Command palette">⌘ <span class="kbd">Ctrl K</span></button>
+      <button id="paletteBtn" title="Command palette"><span class="pal-sym"></span> <span class="kbd" id="palKbd"></span></button>
       <button id="themeBtn" title="Toggle theme">🌙</button>
       <a class="gh" href="https://github.com/k3rokami" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
@@ -43,10 +75,11 @@
         <span class="status"><span class="live"></span>Available for work</span>
         <h1>Kurokami<span class="accent">.</span><br>builds for web &amp; VR.</h1>
         <p class="role mono"><span id="role"></span><span class="cursor">&nbsp;</span></p>
-        <p class="lead">Developer who ships web front-ends, VRChat worlds and avatars, and small tools. Clean code, playful UI, real projects. Try the terminal → or press <span class="kbd">Ctrl K</span>.</p>
+        <p class="lead">Developer who ships web front-ends, VRChat worlds and avatars, and small tools. Clean code, playful UI, real projects. Try the terminal → or press <span class="kbd" id="leadKbd">Ctrl K</span>.</p>
         <div class="cta">
           <a class="btn primary" href="#projects">View projects</a>
-          <a class="btn ghost" href="https://github.com/k3rokami" target="_blank" rel="noopener">GitHub ↗</a>
+          <a class="btn ghost" href="./resume.html">Resume</a>
+          <a class="btn ghost" href="./Kurokami-Resume.pdf" download>Download CV ↓</a>
         </div>
       </div>
       <div class="hero-right">
@@ -62,24 +95,32 @@
   <main class="wrap">
     <section class="section"><div class="stats reveal" id="stats"></div></section>
 
+    <section class="section" id="about">
+      <div class="section-head"><span class="idx">01.</span><h2>About</h2><span class="line"></span></div>
+      <div class="about reveal">
+        <div class="about-text" id="aboutText"></div>
+        <aside class="about-facts"><h3>Quick facts</h3><ul id="aboutFacts"></ul></aside>
+      </div>
+    </section>
+
     <section class="section" id="stack">
-      <div class="section-head"><span class="idx">01.</span><h2>Tech stack</h2><span class="line"></span></div>
+      <div class="section-head"><span class="idx">02.</span><h2>Tech stack</h2><span class="line"></span></div>
       <div class="stack reveal" id="stackList"></div>
     </section>
 
     <section class="section" id="projects">
-      <div class="section-head"><span class="idx">02.</span><h2>Projects</h2><span class="line"></span></div>
+      <div class="section-head"><span class="idx">03.</span><h2>Projects</h2><span class="line"></span></div>
       <div class="filters reveal" id="filters"></div>
       <div class="grid" id="projectGrid"></div>
     </section>
 
     <section class="section" id="experience">
-      <div class="section-head"><span class="idx">03.</span><h2>Experience</h2><span class="line"></span></div>
+      <div class="section-head"><span class="idx">04.</span><h2>Experience</h2><span class="line"></span></div>
       <div class="timeline reveal" id="timeline"></div>
     </section>
 
     <section class="section" id="contact">
-      <div class="section-head"><span class="idx">04.</span><h2>Contact</h2><span class="line"></span></div>
+      <div class="section-head"><span class="idx">05.</span><h2>Contact</h2><span class="line"></span></div>
       <div class="glass reveal">
         <p>Open to freelance and collaboration. Click a chip to copy, or jump to GitHub.</p>
         <div class="socials" id="socials"></div>

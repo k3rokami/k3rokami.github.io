@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <title>Kurokami · Resume</title>
+  <meta name="description" content="Kurokami — web & VR developer. Resume / CV.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./index.css">
+  <script src="./stack-data.js"></script>
+</head>
+
+<body>
+  <div id="loader" aria-hidden="true">
+    <canvas id="loaderPetals"></canvas>
+    <div class="loader-inner">
+      <div class="mage">
+        <img id="mageImg" src="./Background/frieren.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <svg class="mage-fallback" viewBox="0 0 120 180" width="150" height="225" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M42 46 q-12 -2 -14 24 q-2 34 6 70 q3 14 -2 24" fill="currentColor" fill-opacity=".14"/>
+            <path d="M78 46 q12 -2 14 24 q2 34 -6 70 q-3 14 2 24" fill="currentColor" fill-opacity=".14"/>
+            <circle cx="60" cy="40" r="17" fill="currentColor" fill-opacity=".10"/>
+            <path d="M44 38 q-10 -4 -13 -13"/>
+            <path d="M76 38 q10 -4 13 -13"/>
+            <path d="M40 60 q20 10 40 0 l10 86 q-30 14 -60 0 z" fill="currentColor" fill-opacity=".12"/>
+            <line x1="92" y1="30" x2="100" y2="150"/>
+            <circle class="staff-orb" cx="90" cy="26" r="6" fill="currentColor" fill-opacity=".25"/>
+          </g>
+        </svg>
+      </div>
+      <div class="loader-name">resume</div>
+      <div class="loader-log mono" id="loaderLog"></div>
+      <div class="loader-bar"><span id="loaderFill"></span></div>
+    </div>
+  </div>
+  <div id="backdrop"></div>
+  <div id="grid-lines"></div>
+
+  <nav>
+    <a class="brand" href="./index.html#top"><span class="dot"></span><span class="prompt">~/</span>kurokami</a>
+    <div class="nav-links">
+      <a href="./index.html#about">about</a>
+      <a href="./index.html#stack">stack</a>
+      <a href="./index.html#projects">projects</a>
+      <a href="./index.html#experience">experience</a>
+      <a href="./resume.html">resume</a>
+      <a href="./index.html#contact">contact</a>
+      <a class="gh" href="https://github.com/k3rokami" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </nav>
+
+  <main class="resume-wrap">
+    <div class="resume-top">
+      <a class="back" href="./index.html">← back to portfolio</a>
+      <div class="cta" style="margin:0">
+        <button class="btn primary" id="printBtn">Print / Save PDF</button>
+        <a class="btn ghost" id="pdfBtn" href="./Kurokami-Resume.pdf" target="_blank" rel="noopener">Download PDF ↗</a>
+      </div>
+    </div>
+
+    <header class="resume-head" id="rHead"></header>
+
+    <section class="resume-sec"><h2>Skills</h2><div class="stack" id="rSkills"></div></section>
+    <section class="resume-sec"><h2>Experience</h2><div id="rExp"></div></section>
+    <section class="resume-sec"><h2>Projects</h2><div id="rProj"></div></section>
+    <section class="resume-sec"><h2>Education</h2><div id="rEdu"></div></section>
+  </main>
+
+  <script>
+  /* ---- EDIT YOUR RESUME HERE ---- */
+  const GH_USER = 'k3rokami';
+  const resume = {
+    name: 'Kurokami',
+    tag: 'Web & VR Developer',
+    meta: [
+      { label: 'GitHub', url: 'https://github.com/' + GH_USER },
+      { label: 'Location: remote' }
+    ],
+    summary: 'Developer who ships web front-ends, VRChat worlds and avatars, and small tools. Clean code, playful UI, real projects.',
+    skills: ['JavaScript','HTML5','CSS / SCSS','C#','Unity','VRChat SDK','Git','PHP','Node.js','REST APIs','Responsive UI','Figma'],
+    experience: [
+      { role: 'Independent Developer', org: 'Self-employed', when: '2024 — now',
+        points: ['Web front-ends and personal tools.', 'Open-source experiments and client work.'] },
+      { role: 'VRChat Creator', org: 'Freelance / personal', when: '2022 — 2024',
+        points: ['Built avatars and worlds in Unity.', 'Learned C#, performance optimization, and the VRChat SDK pipeline.'] }
+    ],
+    projects: [
+      { name: 'Personal Link Page', when: 'JavaScript', org: 'GitHub Pages',
+        points: ['Config-driven link-in-bio, vanilla JS, zero dependencies.'] },
+      { name: 'VRChat Avatars & Worlds', when: 'Unity · C#', org: 'VRChat',
+        points: ['Expression menus, toggles, PhysBones, Udon logic, perf-optimized rigs.'] }
+    ],
+    education: [
+      { role: 'Self-taught — Web & Game Dev', org: '', when: '2020 — now',
+        points: ['HTML/CSS/JS → Git → real projects → Unity / C# / VR.'] }
+    ]
+  };
+  /* ---- END EDIT ---- */
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+  // theme carries over from the portfolio
+  document.documentElement.setAttribute('data-theme', localStorage.getItem('kk-theme') || 'dark');
+
+  document.getElementById('rHead').innerHTML =
+    `<h1>${esc(resume.name)}</h1><div class="tag">${esc(resume.tag)}</div>
+     <div class="meta">${resume.meta.map(m => m.url ? `<a href="${m.url}" target="_blank" rel="noopener">${esc(m.label)} ↗</a>` : `<span>${esc(m.label)}</span>`).join('')}</div>
+     <p class="lead" style="margin-top:16px">${esc(resume.summary)}</p>`;
+
+  // grouped tech stack with jsDelivr devicon icons — same format as index.html.
+  // falls back to the flat resume.skills list if stack-data.js is missing.
+  const rSkills = document.getElementById('rSkills');
+  if (window.STACK_DATA && STACK_DATA.groups.length) {
+    const DEVICON = STACK_DATA.DEVICON;
+    rSkills.innerHTML = STACK_DATA.groups.map(g => {
+      const items = g.items.map(it => {
+        const icon = it.icon
+          ? `<img class="chip-img" src="${DEVICON(it.icon)}" alt="" loading="lazy" onerror="this.remove()">`
+          : `<b>#</b>`;
+        return `<span class="chip chip-icon">${icon} ${esc(it.name)}</span>`;
+      }).join('');
+      return `<div class="stack-group"><h3 class="stack-group-title">${esc(g.group)}</h3><div class="stack-row-icons">${items}</div></div>`;
+    }).join('');
+  } else {
+    rSkills.innerHTML = resume.skills.map(s => `<span class="chip"><b>#</b> ${esc(s)}</span>`).join('');
+  }
+
+  const item = x => `<div class="resume-item">
+      <div class="r-top"><h3>${esc(x.role || x.name)}</h3><span class="when">${esc(x.when)}</span></div>
+      ${x.org ? `<div class="org">${esc(x.org)}</div>` : ''}
+      ${x.points && x.points.length ? `<ul>${x.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}
+    </div>`;
+  document.getElementById('rExp').innerHTML = resume.experience.map(item).join('');
+  document.getElementById('rProj').innerHTML = resume.projects.map(item).join('');
+  document.getElementById('rEdu').innerHTML = resume.education.map(item).join('');
+
+  document.getElementById('printBtn').onclick = () => print();
+
+  /* ===== LOADING OVERLAY ===== */
+  (function loader(){
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const el = document.getElementById('loader'); if (!el) return;
+    const start = Date.now();
+    const MIN = reduceMotion ? 0 : 750;
+    const logEl = document.getElementById('loaderLog');
+    const fill = document.getElementById('loaderFill');
+    const lines = [
+      `<span class="pk">$</span> open resume.md`,
+      `  <span class="ok">✓</span> credentials loaded`,
+      `  <span class="ok">✓</span> ready`
+    ];
+    if (reduceMotion) { logEl.innerHTML = lines.join('\n'); }
+    else { let li=0; (function type(){ if(li>=lines.length) return; logEl.innerHTML = lines.slice(0,li).join('\n') + (li?'\n':'') + lines[li] + '<span class="cur">&nbsp;</span>'; li++; setTimeout(type,220); })(); }
+    function setFill(r){ if(fill) fill.style.transform = 'scaleX(' + Math.min(1, Math.max(0, r)) + ')'; }
+    const imgs = [...document.images]; const total = Math.max(1, imgs.length); let loaded = 0;
+    setFill(0.1);
+    imgs.forEach(img => { if(img.complete) { loaded++; setFill(loaded/total); } else { const b=()=>{ loaded++; setFill(loaded/total); }; img.addEventListener('load',b); img.addEventListener('error',b); } });
+    if (!reduceMotion) (function petals(){
+      const cv=document.getElementById('loaderPetals'); if(!cv) return; const ctx=cv.getContext('2d'); let w,h,parts,raf=0;
+      function resize(){ w=cv.width=el.clientWidth; h=cv.height=el.clientHeight; parts=Array.from({length:14},spawn); }
+      function spawn(){ return {x:Math.random()*w,y:Math.random()*h,r:2+Math.random()*3,sp:.25+Math.random()*.6,sway:Math.random()*6.28,swaySp:.015+Math.random()*.02,rot:Math.random()*3,rotSp:(Math.random()-.5)*.03,op:.1+Math.random()*.22}; }
+      function petal(c,r){ c.beginPath();c.moveTo(0,0);c.bezierCurveTo(r*.5,-r*.5,r,-r*.2,r,r*.4);c.bezierCurveTo(r,r,r*.3,r*1.2,0,r*.9);c.bezierCurveTo(-r*.3,r*1.2,-r,r,-r,r*.4);c.bezierCurveTo(-r,-r*.2,-r*.5,-r*.5,0,0);c.closePath(); }
+      function frame(){ ctx.clearRect(0,0,w,h); parts.forEach(p=>{ p.y+=p.sp;p.sway+=p.swaySp;p.x+=Math.sin(p.sway)*.4;p.rot+=p.rotSp; if(p.y>h+14)Object.assign(p,spawn(),{y:-14,x:Math.random()*w}); ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=p.op;ctx.fillStyle='#F48FB1';petal(ctx,p.r);ctx.fill();ctx.restore(); }); raf=requestAnimationFrame(frame); }
+      resize(); frame(); el._stopPetals=()=>{ if(raf) cancelAnimationFrame(raf); };
+    })();
+    function hide(){ const wait=Math.max(0, MIN-(Date.now()-start)); setTimeout(()=>{ setFill(1); el.classList.add('done'); if(el._stopPetals) el._stopPetals(); setTimeout(()=>el.remove(),600); }, wait); }
+    if (document.readyState==='complete') hide(); else addEventListener('load', hide);
+    setTimeout(hide, 6000);
+  })();
+  </script>
+</body>
+
+</html>

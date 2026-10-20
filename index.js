@@ -4,30 +4,67 @@ const GH = 'https://github.com/' + GH_USER;
 const DISCORD = 'k3rokami';
 
 /* ---- EDIT HERE ---- */
+// ABOUT — edit these. paragraphs = array of strings; facts = label/value pairs.
+const about = {
+  paragraphs: [
+    'Placeholder — write 2–3 sentences in your own voice: who you are and how you got into building things.',
+    'Placeholder — what you care about: the kind of work you want to do, what you find fun, what you are learning right now.',
+    'Placeholder — a line of personality: a hobby, what you do away from the keyboard, anything that makes you you.'
+  ],
+  facts: [
+    { k: 'Location', v: 'Remote' },
+    { k: 'Focus', v: 'Web front-ends & VR' },
+    { k: 'Languages', v: '中文 / English / 日本語' },
+    { k: 'Currently', v: 'Open to work' },
+    { k: 'Off-screen', v: 'Placeholder hobby' }
+  ]
+};
 const stats = [
-  { n: 5, suffix: '+', k: 'years coding' },
-  { n: 20, suffix: '+', k: 'projects built' },
+  { n: 4, suffix: '+', k: 'years coding' },
+  { n: 10, suffix: '+', k: 'projects built' },
   { n: 3, suffix: '', k: 'languages spoken' },
   { n: 99, suffix: '+', k: 'cups of coffee' }
 ];
-const stack = ['JavaScript','HTML5','CSS / SCSS','C#','Unity','VRChat SDK','Git','PHP','Node.js','REST APIs','Responsive UI','Figma'];
+// tech stack comes from the shared stack-data.js (also used by resume.html)
+const DEVICON = (window.STACK_DATA && window.STACK_DATA.DEVICON) || (n => `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${n}/${n}-original.svg`);
+const stackGroups = (window.STACK_DATA && window.STACK_DATA.groups) || [];
+// flat list kept for the terminal `stack` command
+const stack = (window.STACK_DATA && window.STACK_DATA.flat) || [];
 
-// fallback projects (used if GitHub API fails or for non-repo work)
-const fallbackProjects = [
-  { title: 'Personal Link Page', desc: 'Config-driven link-in-bio built with vanilla JS: randomized animated backgrounds, trilingual bio, zero dependencies. On GitHub Pages.', stack: ['JavaScript','HTML','SCSS'], lang: 'JavaScript', featured: true, repo: GH + '/k3rokami.github.io', live: './index.html', stars: 0 },
-  { title: 'VRChat Avatars', desc: 'Custom avatars via the VRChat SDK — expression menus, toggles, PhysBones, perf-optimized rigs.', stack: ['Unity','C#','VRChat SDK'], lang: 'C#', repo: '', live: 'https://vrchat.com/home/user/usr_37ef9e8e-c51a-4fdd-b008-dd8bae1c0394', stars: 0 },
-  { title: 'VRChat Worlds', desc: 'Interactive VR spaces with Udon logic, optimized lighting and props.', stack: ['Unity','Udon','C#'], lang: 'C#', repo: '', live: '', stars: 0 }
-];
+/* ==========================================================================
+   PROJECTS — add / remove freely by editing the myProjects array below.
+   Each project (all fields optional except title):
+     title    : card heading
+     desc     : one or two lines
+     stack    : array of tech tags, e.g. ['Unity','C#']
+     lang     : used by the filter tabs, e.g. 'JavaScript' (defaults to 'Other')
+     repo     : source URL (top-right GitHub icon) — leave '' for none
+     live     : live/demo URL (top-right ↗ icon, and whole-card click target)
+     featured : true = card spans two columns (use on one project)
+     stars    : number shown with a ★ (0 hides it)
+   PROJECT_MODE:
+     'manual' : show only the myProjects list below  (full control — default)
+     'github' : show only repos pulled from GitHub
+     'both'   : myProjects first, then GitHub repos after
+   ========================================================================== */
+// project data comes from the shared projects-data.js (also used by projects.html)
+const PROJECT_MODE = (window.PROJECTS_DATA && window.PROJECTS_DATA.PROJECT_MODE) || 'manual';
+const TEASER_COUNT = (window.PROJECTS_DATA && window.PROJECTS_DATA.TEASER_COUNT) || 6;
+const myProjects = (window.PROJECTS_DATA && window.PROJECTS_DATA.projects) || [];
 const timeline = [
   { when: '2024 — now', title: 'Independent Developer', desc: 'Web front-ends and VRChat content; personal tools and open-source experiments.' },
   { when: '2022 — 2024', title: 'VRChat Creator', desc: 'Avatars and worlds in Unity; learned C#, optimization, and the VRChat SDK pipeline.' },
   { when: '2020 — 2022', title: 'Learning to Code', desc: 'HTML/CSS/JS, small sites and scripts, then Git and real projects.' }
 ];
+const EMAIL = 'leongjunhong2002@gmail.com';          // <-- set your real email
+const LINKEDIN = 'https://www.linkedin.com/in/leongjunhong';  // <-- set your LinkedIn URL
+// inline SVGs use currentColor so they tint with the theme (unlike <img>)
+const liIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>`;
+const mailIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>`;
 const socials = [
-  { name: 'GitHub', text: '@' + GH_USER, icon: '', url: GH },
-  { name: 'Discord', text: DISCORD, icon: './Icons/Discord.svg', copy: DISCORD },
-  { name: 'Twitter', text: '@k3rokami', icon: './Icons/Twitter.png', url: 'https://twitter.com/k3rokami' },
-  { name: 'Steam', text: 'Kurokami', icon: './Icons/Steam.png', url: 'https://steamcommunity.com/id/k3rokami/' }
+  { name: 'GitHub', text: '@' + GH_USER, url: GH },   // no svg = render uses the ghIcon fallback
+  { name: 'LinkedIn', text: 'Connect', svg: liIcon, url: LINKEDIN },
+  { name: 'Email', text: '', svg: mailIcon, copy: EMAIL }   // button: click to copy
 ];
 /* ---- END EDIT ---- */
 
@@ -35,6 +72,23 @@ const ghIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="currentCol
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
 
 /* ===== THEME ===== */
+/* ===== OS-AWARE PALETTE HINT ===== */
+const uaStr = (navigator.platform || '') + ' ' + (navigator.userAgent || '');
+const isMac = /Mac|iPhone|iPod|iPad/i.test(uaStr);
+const isWin = /Win/i.test(uaStr);
+const isLinux = /Linux|X11/i.test(uaStr) && !/Android/i.test(uaStr);
+// label: Mac uses ⌘; Win/Linux use Ctrl. Glyph is decorative per OS.
+const osGlyph = isMac ? '⌘' : isWin ? '⊞' : isLinux ? '🐧' : '';
+const palKbdText = isMac ? '⌘K' : 'Ctrl K';
+(function osHint(){
+  const sym = document.querySelector('#paletteBtn .pal-sym');
+  const palKbd = document.getElementById('palKbd');
+  const leadKbd = document.getElementById('leadKbd');
+  if (sym) sym.textContent = isMac ? '' : osGlyph;   // Mac glyph already in the kbd label; Win/Linux show their mascot glyph
+  if (palKbd) palKbd.textContent = palKbdText;
+  if (leadKbd) leadKbd.textContent = (isMac ? '⌘' : 'Ctrl') + ' K';
+})();
+
 const themeBtn = document.getElementById('themeBtn');
 function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); themeBtn.textContent = t === 'dark' ? '🌙' : '☀️'; localStorage.setItem('kk-theme', t); }
 applyTheme(localStorage.getItem('kk-theme') || 'dark');
@@ -55,7 +109,26 @@ document.querySelectorAll('.stat .n').forEach(el => statIO.observe(el));
 
 /* ===== STACK ===== */
 const stackEl = document.getElementById('stackList');
-stack.forEach(s => { const c=document.createElement('span'); c.className='chip'; c.innerHTML=`<b>#</b> ${esc(s)}`; stackEl.appendChild(c); });
+stackGroups.forEach(g => {
+  const wrap = document.createElement('div'); wrap.className = 'stack-group';
+  const h = document.createElement('h3'); h.className = 'stack-group-title'; h.textContent = g.group;
+  const row = document.createElement('div'); row.className = 'stack-row-icons';
+  g.items.forEach(it => {
+    const c = document.createElement('span'); c.className = 'chip chip-icon';
+    const icon = it.icon
+      ? `<img class="chip-img" src="${DEVICON(it.icon)}" alt="" loading="lazy" onerror="this.remove()">`
+      : `<b>#</b>`;
+    c.innerHTML = `${icon} ${esc(it.name)}`;
+    row.appendChild(c);
+  });
+  wrap.appendChild(h); wrap.appendChild(row); stackEl.appendChild(wrap);
+});
+
+/* ===== ABOUT ===== */
+const aboutText = document.getElementById('aboutText');
+const aboutFacts = document.getElementById('aboutFacts');
+if (aboutText) aboutText.innerHTML = about.paragraphs.map(p => `<p>${esc(p)}</p>`).join('');
+if (aboutFacts) aboutFacts.innerHTML = about.facts.map(f => `<li><span class="fk">${esc(f.k)}</span><span class="fv">${esc(f.v)}</span></li>`).join('');
 
 /* ===== PROJECTS (live GitHub + fallback) ===== */
 const grid = document.getElementById('projectGrid');
@@ -74,7 +147,20 @@ function cardHTML(p, i) {
 
 function renderProjects(list) {
   grid.innerHTML = '';
-  list.forEach((p, i) => { const c=document.createElement('article'); c.className='card reveal'+(p.featured?' featured':''); c.dataset.lang=p.lang||'Other'; c.style.transitionDelay=(i*60)+'ms'; c.innerHTML=cardHTML(p,i); grid.appendChild(c); });
+  list.forEach((p, i) => {
+    const c=document.createElement('article'); c.className='card reveal'+(p.featured?' featured':''); c.dataset.lang=p.lang||'Other'; c.style.transitionDelay=(i*60)+'ms'; c.innerHTML=cardHTML(p,i);
+    const target = p.live || p.repo;
+    if (target) {
+      c.classList.add('clickable');
+      c.addEventListener('click', e => {
+        if (e.target.closest('a')) return; // let top-right icon links handle their own click
+        if (target.startsWith('http')) open(target,'_blank'); else location.href=target;
+      });
+    }
+    // keep top-right links from also triggering the card click
+    c.querySelectorAll('.ext a').forEach(a => a.addEventListener('click', e => e.stopPropagation()));
+    grid.appendChild(c);
+  });
   wireReveal(); wireTilt(); buildFilters(list);
 }
 
@@ -89,29 +175,51 @@ function buildFilters(list) {
   });
 }
 
-async function loadGitHub() {
-  try {
-    const r = await fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=updated`);
-    if (!r.ok) throw new Error('gh ' + r.status);
-    const repos = (await r.json())
-      .filter(x => !x.fork && !x.archived)
-      .sort((a,b) => b.stargazers_count - a.stargazers_count || new Date(b.pushed_at)-new Date(a.pushed_at))
-      .slice(0, 8)
-      .map(x => ({
-        title: x.name, desc: x.description || 'No description provided.',
-        stack: [x.language, ...(x.topics||[]).slice(0,3)].filter(Boolean),
-        lang: x.language || 'Other', repo: x.html_url, live: x.homepage || '', stars: x.stargazers_count,
-        featured: false, pushed: x.pushed_at
-      }));
-    if (!repos.length) throw new Error('no repos');
-    if (repos[0]) repos[0].featured = true;
-    allProjects = repos;
-  } catch (e) {
-    allProjects = fallbackProjects;
-  }
-  renderProjects(allProjects);
+async function fetchGitHub() {
+  const r = await fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=updated`);
+  if (!r.ok) throw new Error('gh ' + r.status);
+  return (await r.json())
+    .filter(x => !x.fork && !x.archived)
+    .sort((a,b) => b.stargazers_count - a.stargazers_count || new Date(b.pushed_at)-new Date(a.pushed_at))
+    .slice(0, 8)
+    .map(x => ({
+      title: x.name, desc: x.description || 'No description provided.',
+      stack: [x.language, ...(x.topics||[]).slice(0,3)].filter(Boolean),
+      lang: x.language || 'Other', repo: x.html_url, live: x.homepage || '', stars: x.stargazers_count,
+      featured: false, pushed: x.pushed_at
+    }));
 }
-loadGitHub();
+
+async function loadProjects() {
+  // manual: just your list — total control, no network needed
+  if (PROJECT_MODE === 'manual') { allProjects = myProjects.slice(); renderProjects(allProjects.slice(0, TEASER_COUNT)); showViewAll(allProjects.length); return; }
+
+  // github / both: try the API, fall back to your list if it fails
+  let repos = [];
+  try { repos = await fetchGitHub(); } catch (e) { repos = []; }
+
+  if (PROJECT_MODE === 'both') {
+    allProjects = [...myProjects, ...repos];
+  } else { // 'github'
+    allProjects = repos.length ? repos : myProjects.slice();
+    if (PROJECT_MODE === 'github' && repos.length && !allProjects.some(p => p.featured)) allProjects[0].featured = true;
+  }
+  renderProjects(allProjects.slice(0, TEASER_COUNT));
+  showViewAll(allProjects.length);
+}
+
+// "View all projects →" button under the teaser grid, shown when there are more
+function showViewAll(total) {
+  const sec = document.getElementById('projects'); if (!sec) return;
+  let link = document.getElementById('viewAllProjects');
+  if (!link) {
+    link = document.createElement('a'); link.id = 'viewAllProjects'; link.className = 'btn ghost view-all';
+    link.href = './projects.html';
+    sec.appendChild(link);
+  }
+  link.textContent = total > TEASER_COUNT ? `View all ${total} projects →` : 'View all projects →';
+}
+loadProjects();
 
 /* ===== TIMELINE ===== */
 const tl = document.getElementById('timeline');
@@ -122,7 +230,7 @@ const socialWrap = document.getElementById('socials');
 socials.forEach(s => {
   const a = document.createElement(s.url ? 'a' : 'button'); a.className='social';
   if (s.url) { a.href=s.url; a.target='_blank'; a.rel='noopener'; }
-  const icon = s.icon ? `<img src="${s.icon}" alt="${esc(s.name)}">` : ghIcon;
+  const icon = s.svg ? s.svg : s.icon ? `<img src="${s.icon}" alt="${esc(s.name)}">` : ghIcon;
   a.innerHTML = `${icon}<span>${esc(s.name)}</span><span style="opacity:.5" class="val">${esc(s.text)}</span>`;
   if (s.copy) a.onclick = () => { navigator.clipboard?.writeText(s.copy); const v=a.querySelector('.val'); const old=v.textContent; v.textContent='copied ✓'; v.classList.add('copied'); setTimeout(()=>{v.textContent=old;v.classList.remove('copied');},1200); };
   socialWrap.appendChild(a);
@@ -135,7 +243,8 @@ const history = [];
 let hIdx = 0;
 function print(html) { const d=document.createElement('div'); d.className='line'; d.innerHTML=html; screen.appendChild(d); screen.scrollTop=screen.scrollHeight; }
 const commands = {
-  help: () => print(`<span class="t-com">commands:</span> help, whoami, about, projects, stack, social, open &lt;github|links&gt;, theme, clear`),
+  help: () => print(`<span class="t-com">commands:</span> help, whoami, about, projects, stack, social, resume, open &lt;github|links&gt;, theme, clear`),
+  resume: () => { print('opening resume…'); location.href='./resume.html'; },
   whoami: () => print('kurokami — web &amp; VR developer'),
   about: () => print('I build web front-ends, VRChat worlds &amp; avatars, and small tools. 中文 / EN / 日本語.'),
   stack: () => print('<span class="t-key">stack</span>: ' + stack.map(esc).join(', ')),
@@ -175,9 +284,11 @@ const palInput = document.getElementById('palInput');
 const palList = document.getElementById('palList');
 const palActions = [
   { ic:'→', label:'Go to Projects', run:()=>jump('#projects') },
+  { ic:'→', label:'Go to About', run:()=>jump('#about') },
   { ic:'→', label:'Go to Tech stack', run:()=>jump('#stack') },
   { ic:'→', label:'Go to Experience', run:()=>jump('#experience') },
   { ic:'→', label:'Go to Contact', run:()=>jump('#contact') },
+  { ic:'¶', label:'Open Resume', hint:'↗', run:()=>location.href='./resume.html' },
   { ic:'↑', label:'Back to top', run:()=>jump('#top') },
   { ic:'◐', label:'Toggle theme', run:()=>themeBtn.click() },
   { ic:ghIcon, label:'Open GitHub', hint:'↗', run:()=>open(GH,'_blank') },
@@ -216,8 +327,8 @@ function wireReveal(){ const io=new IntersectionObserver(es=>es.forEach(e=>{ if(
 function wireTilt(){ if(reduceMotion) return; document.querySelectorAll('.card').forEach(card=>{ card.onmousemove=e=>{ const r=card.getBoundingClientRect(); const px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5; card.style.transform=`perspective(900px) rotateY(${px*5}deg) rotateX(${-py*5}deg) translateY(-4px)`; }; card.onmouseleave=()=>card.style.transform=''; }); }
 wireReveal();
 document.querySelectorAll('.btn').forEach(btn => btn.addEventListener('click', e => { if(reduceMotion) return; const r=document.createElement('span'); r.className='ripple'; const rc=btn.getBoundingClientRect(), sz=Math.max(rc.width,rc.height); r.style.width=r.style.height=sz+'px'; r.style.left=(e.clientX-rc.left-sz/2)+'px'; r.style.top=(e.clientY-rc.top-sz/2)+'px'; btn.appendChild(r); setTimeout(()=>r.remove(),600); }));
-const prog=document.getElementById('progress'), toTop=document.getElementById('toTop');
-addEventListener('scroll', () => { const h=document.documentElement; const pct=h.scrollTop/(h.scrollHeight-h.clientHeight)*100; prog.style.width=pct+'%'; toTop.classList.toggle('show', h.scrollTop>500); }, { passive:true });
+const toTop=document.getElementById('toTop');
+addEventListener('scroll', () => { const h=document.documentElement; toTop.classList.toggle('show', h.scrollTop>500); }, { passive:true });
 toTop.onclick = () => scrollTo({ top:0, behavior:'smooth' });
 
 /* ===== CURSOR SPOTLIGHT ===== */
@@ -228,6 +339,83 @@ if (!reduceMotion) addEventListener('pointermove', e => { document.documentEleme
   function resize(){ w=cv.width=innerWidth; h=cv.height=innerHeight; parts=Array.from({length:Math.min(24,Math.floor(w/55))},spawn); }
   function spawn(){ return {x:Math.random()*w,y:Math.random()*h,r:3+Math.random()*4,sp:.3+Math.random()*.8,sway:Math.random()*6.28,swaySp:.01+Math.random()*.025,rot:Math.random()*3,rotSp:(Math.random()-.5)*.03,op:.14+Math.random()*.28}; }
   function petal(c,r){ c.beginPath();c.moveTo(0,0);c.bezierCurveTo(r*.5,-r*.5,r,-r*.2,r,r*.4);c.bezierCurveTo(r,r,r*.3,r*1.2,0,r*.9);c.bezierCurveTo(-r*.3,r*1.2,-r,r,-r,r*.4);c.bezierCurveTo(-r,-r*.2,-r*.5,-r*.5,0,0);c.closePath(); }
-  function frame(){ ctx.clearRect(0,0,w,h); parts.forEach(p=>{ p.y+=p.sp;p.sway+=p.swaySp;p.x+=Math.sin(p.sway)*.5;p.rot+=p.rotSp; if(p.y>h+20)Object.assign(p,spawn(),{y:-20,x:Math.random()*w}); ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=p.op;ctx.fillStyle='#F48FB1';petal(ctx,p.r);ctx.fill();ctx.restore(); }); requestAnimationFrame(frame); }
-  addEventListener('resize',resize); resize(); frame();
+  let raf = 0;
+  function frame(){ ctx.clearRect(0,0,w,h); parts.forEach(p=>{ p.y+=p.sp;p.sway+=p.swaySp;p.x+=Math.sin(p.sway)*.5;p.rot+=p.rotSp; if(p.y>h+20)Object.assign(p,spawn(),{y:-20,x:Math.random()*w}); ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=p.op;ctx.fillStyle='#F48FB1';petal(ctx,p.r);ctx.fill();ctx.restore(); }); raf=requestAnimationFrame(frame); }
+  function startFrames(){ if(!raf) raf=requestAnimationFrame(frame); }
+  function stopFrames(){ if(raf){ cancelAnimationFrame(raf); raf=0; } }
+  document.addEventListener('visibilitychange', () => document.hidden ? stopFrames() : startFrames());
+  addEventListener('resize',resize); resize(); startFrames();
 })();
+
+/* ===== LOADING OVERLAY ===== */
+(function loader(){
+  const el = document.getElementById('loader');
+  if (!el) return;
+  const start = Date.now();
+  const MIN = reduceMotion ? 0 : 900;
+  const logEl = document.getElementById('loaderLog');
+  const fill = document.getElementById('loaderFill');
+
+  /* ---- boot log (idea: casting a spell == booting the site) ---- */
+  const lines = [
+    `<span class="pk">$</span> summon kurokami.dev`,
+    `  <span class="ok">✓</span> grimoire linked`,
+    `  <span class="ok">✓</span> mana channels open`,
+    `  <span class="ok">✓</span> petals enchanted`,
+    `<span class="pk">spell cast.</span> entering…`
+  ];
+  if (reduceMotion) {
+    logEl.innerHTML = lines.join('\n');
+  } else {
+    let li = 0;
+    (function typeLine(){
+      if (li >= lines.length) return;
+      logEl.innerHTML = lines.slice(0, li).join('\n') + (li ? '\n' : '') + lines[li] + '<span class="cur">&nbsp;</span>';
+      // keep only last 4 lines visible
+      const shown = logEl.innerHTML.split('\n'); if (shown.length > 5) logEl.innerHTML = shown.slice(-5).join('\n');
+      li++;
+      setTimeout(typeLine, 230);
+    })();
+  }
+
+  /* ---- real progress bar (count assets actually loaded) ---- */
+  const assets = [...document.images, ...document.querySelectorAll('canvas')];
+  const total = Math.max(1, document.images.length);
+  let loaded = 0;
+  function bump(){ loaded++; setFill(loaded / total); }
+  function setFill(r){ if (fill) fill.style.transform = 'scaleX(' + Math.min(1, Math.max(0, r)) + ')'; }
+  [...document.images].forEach(img => {
+    if (img.complete) bump();
+    else { img.addEventListener('load', bump); img.addEventListener('error', bump); }
+  });
+  setFill(0.08); // show a little immediately so it never reads as stuck
+
+  /* ---- mini petals behind the mage ---- */
+  (function miniPetals(){
+    if (reduceMotion) return;
+    const cv = document.getElementById('loaderPetals'); if (!cv) return;
+    const ctx = cv.getContext('2d'); let w, h, parts, raf = 0;
+    function resize(){ w = cv.width = el.clientWidth; h = cv.height = el.clientHeight; parts = Array.from({length: 14}, spawn); }
+    function spawn(){ return { x: Math.random()*w, y: Math.random()*h, r: 2+Math.random()*3, sp: .25+Math.random()*.6, sway: Math.random()*6.28, swaySp: .015+Math.random()*.02, rot: Math.random()*3, rotSp: (Math.random()-.5)*.03, op: .1+Math.random()*.22 }; }
+    function petal(c, r){ c.beginPath(); c.moveTo(0,0); c.bezierCurveTo(r*.5,-r*.5,r,-r*.2,r,r*.4); c.bezierCurveTo(r,r,r*.3,r*1.2,0,r*.9); c.bezierCurveTo(-r*.3,r*1.2,-r,r,-r,r*.4); c.bezierCurveTo(-r,-r*.2,-r*.5,-r*.5,0,0); c.closePath(); }
+    function frame(){ ctx.clearRect(0,0,w,h); parts.forEach(p => { p.y+=p.sp; p.sway+=p.swaySp; p.x+=Math.sin(p.sway)*.4; p.rot+=p.rotSp; if(p.y>h+14) Object.assign(p, spawn(), {y:-14, x:Math.random()*w}); ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha=p.op; ctx.fillStyle='#F48FB1'; petal(ctx,p.r); ctx.fill(); ctx.restore(); }); raf=requestAnimationFrame(frame); }
+    resize(); frame();
+    el._stopPetals = () => { if(raf) cancelAnimationFrame(raf); };
+  })();
+
+  function hide(){
+    const wait = Math.max(0, MIN - (Date.now() - start));
+    setTimeout(() => {
+      setFill(1);
+      el.classList.add('done');
+      if (el._stopPetals) el._stopPetals();
+      setTimeout(() => el.remove(), 600);
+    }, wait);
+  }
+  if (document.readyState === 'complete') hide();
+  else addEventListener('load', hide);
+  setTimeout(hide, 6000);  // safety: never trap the user
+})();
+
+/* ===== PAUSE AURORA WHEN TAB HIDDEN ===== */
+document.addEventListener('visibilitychange', () => document.documentElement.classList.toggle('bg-paused', document.hidden));
